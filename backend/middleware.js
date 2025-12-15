@@ -3,7 +3,7 @@ require('dotenv').config()
 const JWT_SECRET=process.env.JWT_SECRET
 
 function authMiddleware(req,res,next){
-    const {tokenPayload}=req.headers.authorization
+    const tokenPayload=req.headers.authorization
     const token=tokenPayload.split(' ')[1]
     try{
         const decoded=jwt.verify(token,JWT_SECRET)
@@ -14,7 +14,9 @@ function authMiddleware(req,res,next){
             return res.status(403).json({})
         }
     }catch(err){
-        return res.status(403).json({})
+        return res.status(403).json({
+            msg : 'Authentication failed!'
+        })
     }
 }
 

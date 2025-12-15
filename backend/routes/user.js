@@ -3,6 +3,7 @@ const router=express.Router()
 const zod=require('zod')
 const { User } = require('../db')
 const jwt=require('jsonwebtoken')
+const { authMiddleware } = require('../middleware')
 require('dotenv').config()
 const JWT_SECRET=process.env.JWT_SECRET
 
@@ -12,12 +13,11 @@ const signupSchema=zod.object({
     lastName : zod.string().max(50),
     password : zod.string().min(6)
 })
-
 router.post('/signup',async (req,res)=>{
     const payload=req.body
     const username=req.body.username
-    const validatePayload=signupSchema.safeParse(payload)
-    if(!validatePayload.success){
+    const validatedPayload=signupSchema.safeParse(payload)
+    if(!validatedPayload.success){
         return res.status(411).json({
             msg : 'Incorrect inputs',
         })
@@ -50,6 +50,47 @@ router.post('/signin',async (req,res)=>{
     }
     return res.status(411).json({
         msg : 'Error while logging in'
+    })
+})
+
+const updateSchema=zod.object({
+    password : zod.string().optional(),
+    firstName : zod.string().optional(),
+    lastName : zod.string().optional()
+})
+router.put('/',authMiddleware,async (req,res)=>{
+    const payload=req.body
+    const validatedPayload=updateSchema.safeParse(payload)
+    if(!validatedPayload.success){
+        return res.status(411).json({
+            msg : 'Error while updating information!'
+        })
+    }
+    await User.updateOne({_id : req.userId},{
+        $set : payload
+    })
+    return res.status(200).json({
+        msg : 'Updated successfully!'
+    })
+})
+
+router.get('/bulk/',async (req,res)=>{
+    const filter=req.query.filter || ''
+    const filteredUsers=await User.find({
+        $or : [
+            {firstName : { $regex : filter}},
+            {lastName : { $regex : filter}}
+        ]
+    })
+    const users=filteredUsers.map((user)=>{
+        return {
+            _id : user._id,
+            firstName : user.firstName,
+            lastName : user.lastName
+        }
+    })
+    return res.status(200).json({
+        users
     })
 })
 
