@@ -1,7 +1,7 @@
 const express=require('express')
 const router=express.Router()
 const zod=require('zod')
-const { User } = require('../db')
+const { User, Account } = require('../db')
 const jwt=require('jsonwebtoken')
 const { authMiddleware } = require('../middleware')
 require('dotenv').config()
@@ -28,16 +28,31 @@ router.post('/signup',async (req,res)=>{
             msg : 'Username already taken'
         })
     }
-    const newUser=User.create(payload)
-    const newUserId=newUser._id
-    const token=jwt.sign({newUserId},JWT_SECRET)
+    const newUser=await User.create(payload)
+    const userId=newUser._id
+    await Account.create({
+        userId : userId,
+        balance : 1+Math.random()*1000
+    })
+    const token=jwt.sign({userId},JWT_SECRET)
     return res.status(200).json({
         msg : 'User created successfully',
         token : token
     })
 })
 
+const signinSchema=zod.object({
+    username : zod.string().min(3).max(30).trim(),
+    password : zod.string().min(6)
+})
 router.post('/signin',async (req,res)=>{
+    const payload=req.body
+    const validatedPayload=signinSchema.safeParse(payload)
+    if(!validatedPayload.success){
+        return res.status(411).json({
+            msg : 'Incorrect inputs',
+        })
+    }
     const username=req.body.username
     const password=req.body.password
     const isPresent=await User.findOne({username , password})
