@@ -3,7 +3,8 @@ const router=express.Router()
 const zod=require('zod')
 const { User } = require('../db')
 const jwt=require('jsonwebtoken')
-const JWT_SECRET=require('../config')
+require('dotenv').config()
+const JWT_SECRET=process.env.JWT_SECRET
 
 const signupSchema=zod.object({
     username : zod.string().min(3).max(30).trim(),
