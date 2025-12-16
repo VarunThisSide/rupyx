@@ -14,13 +14,12 @@ export function Signup(){
     const onSubmit=async (data)=>{
       try{
         const res = await axios.post('http://localhost:3000/api/v1/user/signup',data)
-        console.log(res.data)
         const msg=res.data.msg
         notify(msg)
         const jwtToken=res.data.token
         localStorage.setItem('token' , jwtToken)
         setTimeout(()=>{
-            navigate('http://localhost:5173/dashboard')
+            navigate('/dashboard')
         },2000)
       }catch(err){
         notify(err.response.data.msg)
@@ -43,7 +42,7 @@ export function Signup(){
                     <input className="mx-auto p-3 cursor-pointer block my-3 text-white bg-black rounded-sm" type="submit" value="Signup"/>
                 </form>
               </div>
-              <div>Already have an account? <span onClick={()=>{navigate('http://localhost:5173/signin')}} className="underline cursor-pointer">Signin</span></div>
+              <div>Already have an account? <span onClick={()=>{navigate('/signin')}} className="underline cursor-pointer">Signin</span></div>
           </Box>
           <ToastContainer/>
         </>
