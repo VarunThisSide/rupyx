@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router-dom'
 export function AllUsers({filter}){
   const navigate=useNavigate()
   const [allUsers,setAllUsers]=useState([])
+  const [userId,setUserId]=useState(null)
+  const jwtToken=localStorage.getItem('token')
+
   useEffect(()=>{
     const fetchUsers=async ()=>{
       const response=await axios.get(`http://localhost:3000/api/v1/user/bulk?filter=${filter}`)
@@ -15,9 +18,26 @@ export function AllUsers({filter}){
     fetchUsers()
   },[filter])
 
+  useEffect(()=>{
+    const fetchUserId=async ()=>{
+      const response=await axios.get('http://localhost:3000/api/v1/account/balance',{
+        headers : {
+          authorization : jwtToken
+        }
+      })
+      setUserId(response.data.userId)
+    }
+    fetchUserId()
+  },[])
+
+  const visibleUsers=allUsers.filter((user)=>{
+    console.log(user.userId)
+    return user._id!=userId
+  })
+
   return (
     <div>
-      {allUsers.map((user)=>{
+      {visibleUsers.map((user)=>{
         return(
           <div key={user._id} className="flex items-center justify-between px-2 my-4 hover:bg-gray-200/50 py-2 rounded-lg">
             <div className="flex items-center">
