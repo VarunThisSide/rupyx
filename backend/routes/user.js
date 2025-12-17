@@ -69,11 +69,11 @@ router.post('/signin',async (req,res)=>{
 })
 
 const updateSchema=zod.object({
-    password : zod.string().optional(),
-    firstName : zod.string().optional(),
-    lastName : zod.string().optional()
+    password : zod.string().min(6).optional(),
+    firstName : zod.string().max(50).optional(),
+    lastName : zod.string().max(50).optional()
 })
-router.put('/',authMiddleware,async (req,res)=>{
+router.put('/update',authMiddleware,async (req,res)=>{
     const payload=req.body
     const validatedPayload=updateSchema.safeParse(payload)
     if(!validatedPayload.success){
