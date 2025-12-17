@@ -16,7 +16,7 @@ export function Signup(){
         const res = await axios.post('http://localhost:3000/api/v1/user/signup',data)
         const msg=res.data.msg
         notify(msg)
-        const jwtToken=res.data.token
+        const jwtToken='Bearer '+res.data.token
         localStorage.setItem('token' , jwtToken)
         setTimeout(()=>{
             navigate('/dashboard')

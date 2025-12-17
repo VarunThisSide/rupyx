@@ -12,7 +12,7 @@ export function Signin(){
   const onSubmit=async (data)=>{
     try{
       const res=await axios.post('http://localhost:3000/api/v1/user/signin',data)
-      const jwtToken=res.data.token
+      const jwtToken='Bearer '+res.data.token
       localStorage.setItem('token' , jwtToken)
       toast('Signin Successful')
       setTimeout(()=>{
