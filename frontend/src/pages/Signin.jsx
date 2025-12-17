@@ -36,6 +36,7 @@ export function Signin(){
               <input className="mx-auto p-3 cursor-pointer block my-3 text-white bg-black rounded-sm" type="submit" value="Signin"/>
             </form>
           </div>
+          <div>Don't have an account? <span onClick={()=>{navigate('/signup')}} className="underline cursor-pointer">Signup</span></div>
         </Box>
         <ToastContainer/>
       </>
