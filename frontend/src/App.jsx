@@ -4,6 +4,7 @@ import { Signin } from './pages/Signin'
 import { Dashbaord } from './pages/Dashboard'
 import { SendMoney } from './pages/SendMoney'
 import {UpdateProfile} from './pages/UpdateProfile'
+import { Home } from './pages/Home'
 import './App.css'
 
 function App(){
@@ -17,6 +18,7 @@ function App(){
           <Route path='/send' element={<SendMoney/>}/>
           <Route path='/updateprofile' element={<UpdateProfile/>} />
           <Route path='/send' element={<SendMoney/>} />
+          <Route path='/' element={<Home/>} />
         </Routes>
       </BrowserRouter>
     </>
