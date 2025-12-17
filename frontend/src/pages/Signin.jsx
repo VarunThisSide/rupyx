@@ -19,7 +19,6 @@ export function Signin(){
         navigate('/dashboard')
       },2000)
     }catch(err){
-      console.log(err)
       toast(err.response.data.msg)
     }
   }

@@ -12,9 +12,13 @@ export function UpdateProfile(){
   const token=localStorage.getItem('token')
   const onSubmit=async (data)=>{
     try{
+      if(data.firstName === '') delete data.firstName
+      if(data.lastName === '') delete data.lastName
+      if(data.password === '') delete data.password
+      console.log(data)
       const response=await axios.put('http://localhost:3000/api/v1/user/update',data,{
         headers : {
-          authorization : `Bearer ${token}`
+          authorization : token
         }
       })
       toast(response.data.msg)

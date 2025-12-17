@@ -31,7 +31,6 @@ export function AllUsers({filter}){
   },[])
 
   const visibleUsers=allUsers.filter((user)=>{
-    console.log(user.userId)
     return user._id!=userId
   })
 

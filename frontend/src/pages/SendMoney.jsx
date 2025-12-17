@@ -39,11 +39,11 @@ export function SendMoney() {
               navigate('/dashboard')
             },2000)
           }catch(err){
-            console.log(err)
             const errMsg=err.response?.data.msg || 'Transaction Failedd'
             toast(errMsg)
           }
         }} className="bg-black cursor-pointer rounded-lg text-white px-4 py-2">Pay</button>
+        <button onClick={()=>{navigate('/dashboard')}} className="cursor-pointer rounded-lg px-4 py-2 border bg-gray-200">Cancel Transaction</button>
       </div>
       <ToastContainer/>
     </div>
